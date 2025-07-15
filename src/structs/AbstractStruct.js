@@ -1,4 +1,3 @@
-
 import {
   UpdateEncoderV1, UpdateEncoderV2, ID, Transaction // eslint-disable-line
 } from '../internals.js'
@@ -27,7 +26,7 @@ export class AbstractStruct {
    * This method is already assuming that `this.id.clock + this.length === this.id.clock`.
    * Also this method does *not* remove right from StructStore!
    * @param {AbstractStruct} right
-   * @return {boolean} wether this merged with right
+   * @return {boolean} whether this merged with right
    */
   mergeWith (right) {
     return false
