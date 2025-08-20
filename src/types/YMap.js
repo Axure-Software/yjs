@@ -1,4 +1,3 @@
-
 /**
  * @module YMap
  */
@@ -14,6 +13,7 @@ import {
   YMapRefID,
   callTypeObservers,
   transact,
+  warnPrematureAccess,
   UpdateDecoderV1, UpdateDecoderV2, UpdateEncoderV1, UpdateEncoderV2, Doc, Transaction, Item // eslint-disable-line
 } from '../internals.js'
 
@@ -41,7 +41,7 @@ export class YMapEvent extends YEvent {
  * A shared Map implementation.
  *
  * @extends AbstractType<YMapEvent<MapType>>
- * @implements {Iterable<MapType>}
+ * @implements {Iterable<[string, MapType]>}
  */
 export class YMap extends AbstractType {
   /**
@@ -89,6 +89,10 @@ export class YMap extends AbstractType {
   }
 
   /**
+   * Makes a copy of this data type that can be included somewhere else.
+   *
+   * Note that the content is only readable _after_ it has been included somewhere in the Ydoc.
+   *
    * @return {YMap<MapType>}
    */
   clone () {
@@ -118,6 +122,7 @@ export class YMap extends AbstractType {
    * @return {Object<string,any>}
    */
   toJSON () {
+    this.doc ?? warnPrematureAccess()
     /**
      * @type {Object<string,MapType>}
      */
@@ -137,7 +142,7 @@ export class YMap extends AbstractType {
    * @return {number}
    */
   get size () {
-    return [...createMapIterator(this._map)].length
+    return [...createMapIterator(this)].length
   }
 
   /**
@@ -146,25 +151,25 @@ export class YMap extends AbstractType {
    * @return {IterableIterator<string>}
    */
   keys () {
-    return iterator.iteratorMap(createMapIterator(this._map), /** @param {any} v */ v => v[0])
+    return iterator.iteratorMap(createMapIterator(this), /** @param {any} v */ v => v[0])
   }
 
   /**
    * Returns the values for each element in the YMap Type.
    *
-   * @return {IterableIterator<any>}
+   * @return {IterableIterator<MapType>}
    */
   values () {
-    return iterator.iteratorMap(createMapIterator(this._map), /** @param {any} v */ v => v[1].content.getContent()[v[1].length - 1])
+    return iterator.iteratorMap(createMapIterator(this), /** @param {any} v */ v => v[1].content.getContent()[v[1].length - 1])
   }
 
   /**
    * Returns an Iterator of [key, value] pairs
    *
-   * @return {IterableIterator<any>}
+   * @return {IterableIterator<[string, MapType]>}
    */
   entries () {
-    return iterator.iteratorMap(createMapIterator(this._map), /** @param {any} v */ v => [v[0], v[1].content.getContent()[v[1].length - 1]])
+    return iterator.iteratorMap(createMapIterator(this), /** @param {any} v */ v => /** @type {any} */ ([v[0], v[1].content.getContent()[v[1].length - 1]]))
   }
 
   /**
@@ -173,6 +178,7 @@ export class YMap extends AbstractType {
    * @param {function(MapType,string,YMap<MapType>):void} f A function to execute on every element of this YArray.
    */
   forEach (f) {
+    this.doc ?? warnPrematureAccess()
     this._map.forEach((item, key) => {
       if (!item.deleted) {
         f(item.content.getContent()[item.length - 1], key, this)
@@ -183,7 +189,7 @@ export class YMap extends AbstractType {
   /**
    * Returns an Iterator of [key, value] pairs
    *
-   * @return {IterableIterator<any>}
+   * @return {IterableIterator<[string, MapType]>}
    */
   [Symbol.iterator] () {
     return this.entries()
