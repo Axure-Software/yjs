@@ -27,4 +27,4 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
       - run: npm run dist
-      - run: npm publish --access public
+      - run: npm publish --access public --tag fork
