@@ -1,16 +1,12 @@
 {
-  "name": "yjs",
-  "version": "13.6.27",
+  "name": "@romansp/yjs",
+  "version": "13.6.27-beta.1",
   "description": "Shared Editing Library",
   "main": "./dist/yjs.cjs",
   "module": "./dist/yjs.mjs",
   "types": "./dist/src/index.d.ts",
   "type": "module",
   "sideEffects": false,
-  "funding": {
-    "type": "GitHub Sponsors ❤",
-    "url": "https://github.com/sponsors/dmonad"
-  },
   "scripts": {
     "clean": "rm -rf dist docs",
     "test": "npm run dist && NODE_ENV=development node ./dist/tests.cjs --repetition-time 50",
@@ -57,7 +53,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yjs/yjs.git"
+    "url": "https://github.com/Axure-Software/yjs.git"
   },
   "keywords": [
     "Yjs",
@@ -68,11 +64,11 @@
     "concurrency",
     "collaboration"
   ],
-  "author": "Kevin Jahns",
-  "email": "kevin.jahns@protonmail.com",
+  "author": "Axure Software",
+  "email": "support@axure.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yjs/yjs/issues"
+    "url": "https://github.com/Axure-Software/yjs/issues"
   },
   "homepage": "https://docs.yjs.dev",
   "dependencies": {
